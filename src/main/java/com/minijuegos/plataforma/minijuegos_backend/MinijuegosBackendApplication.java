@@ -8,6 +8,15 @@ import com.minijuegos.plataforma.minijuegos_backend.repository.MinijuegoReposito
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
+import com.minijuegos.plataforma.minijuegos_backend.model.Role; // Importa tu modelo Role
+import com.minijuegos.plataforma.minijuegos_backend.model.User;   // Importa tu modelo User
+import com.minijuegos.plataforma.minijuegos_backend.repository.RoleRepository; // Importa tu RoleRepository
+import com.minijuegos.plataforma.minijuegos_backend.repository.UserRepository; // Importa tu UserRepository
+
+import org.springframework.security.crypto.password.PasswordEncoder; // Importa PasswordEncoder
+import java.util.HashSet;
+import java.util.Set;
+
 @SpringBootApplication
 public class MinijuegosBackendApplication {
 
@@ -43,6 +52,33 @@ public class MinijuegosBackendApplication {
 				);
 				repository.save(letrasJuego);
 				System.out.println("Minijuego de Letras Ocultas añadido.");
+			}
+		};
+	}
+	// ¡NUEVO BEAN! Para inicializar el usuario administrador en la base de datos
+	@Bean
+	public CommandLineRunner initAdminUser(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+		return args -> {
+			// 1. Asegúrate de que el rol "ROLE_ADMIN" exista
+			Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+					.orElseGet(() -> {
+						Role newRole = new Role("ROLE_ADMIN");
+						return roleRepository.save(newRole);
+					});
+
+			// 2. Crea un usuario administrador si no existe ya
+			if (userRepository.findByUsername("admin").isEmpty()) {
+				User adminUser = new User();
+				adminUser.setUsername("admin");
+				// Codifica la contraseña antes de guardarla
+				adminUser.setPassword(passwordEncoder.encode("1234")); // ¡Cambia esta contraseña en producción!
+
+				Set<Role> roles = new HashSet<>();
+				roles.add(adminRole);
+				adminUser.setRoles(roles);
+
+				userRepository.save(adminUser);
+				System.out.println("Usuario 'admin' creado en la base de datos con contraseña '1234'");
 			}
 		};
 	}
