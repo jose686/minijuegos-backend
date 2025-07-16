@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .admin-menu {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        .admin-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .admin-menu ul li a {
+            display: block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .admin-menu ul li a:hover {
+            background-color: #0056b3;
+        }
+        .logout-form {
+            display: inline-block;
+            margin-left: 20px; /* Separación del menú principal */
+        }
+        .logout-form button {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .logout-form button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Panel de Administración</h1>
+    <nav>
+        <a href="/">Inicio</a>
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit">Cerrar Sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main>
+    <h2>Bienvenido, <span sec:authentication="name"></span>!</h2>
+
+    <section class="admin-menu">
+        <h3>Opciones de Administración:</h3>
+        <ul>
+            <li><a th:href="@{/admin/minijuegos}">Gestionar Minijuegos</a></li>
+        </ul>
+    </section>
+
+    <section style="margin-top: 30px;">
+        <h3>Resumen Rápido:</h3>
+        <p>Número de minijuegos: <span th:text="${totalMinijuegos}">0</span></p>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2025 Plataforma de Minijuegos</p>
+</footer>
+</body>
+</html>

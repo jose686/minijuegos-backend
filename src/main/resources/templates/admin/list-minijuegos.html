@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Minijuegos</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .admin-table th, .admin-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .admin-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .admin-table img {
+            width: 80px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .actions a, .actions button {
+            margin-right: 5px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .actions .edit-button {
+            background-color: #ffc107;
+            color: #333;
+            border: none;
+        }
+        .actions .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+        .add-button-container {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .add-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .add-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Gestionar Minijuegos</h1>
+    <nav>
+        <a th:href="@{/admin/dashboard}">Panel de Administración</a>
+        <a href="/">Inicio</a>
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit">Cerrar Sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main>
+    <div class="add-button-container">
+        <a th:href="@{/admin/minijuegos/new}" class="add-button">Añadir Nuevo Minijuego</a>
+
+
+    </div>
+
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Portada</th>
+            <th>Ruta Juego</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="minijuego : ${minijuegos}">
+            <td th:text="${minijuego.id}">1</td>
+            <td th:text="${minijuego.nombre}">Suma Fácil</td>
+            <td th:text="${minijuego.descripcion}">Juego para practicar sumas.</td>
+            <td><img th:src="${minijuego.urlPortada}" alt="Portada"></td>
+            <td th:text="${minijuego.rutaJuego}">minijuegos/suma/index.html</td>
+            <td class="actions">
+                <a th:href="@{/admin/minijuegos/edit/{id}(id=${minijuego.id})}" class="button edit-button">Editar</a>
+                <form th:action="@{/admin/minijuegos/delete/{id}(id=${minijuego.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="button delete-button" onclick="return confirm('¿Estás seguro de que quieres eliminar este minijuego?')">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${minijuegos.isEmpty()}">
+            <td colspan="6">No hay minijuegos registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer>
+    <p>&copy; 2025 Plataforma de Minijuegos</p>
+</footer>
+</body>
+</html>

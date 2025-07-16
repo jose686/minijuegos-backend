@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minijuegos Educativos</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"> </head>
+<body>
+<header>
+    <h1>Plataforma de Minijuegos Educativos</h1>
+    <nav>
+        <a href="/">Inicio</a>
+        <a href="/admin/login">Administración</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Minijuegos Disponibles</h2>
+    <section class="minijuegos-grid">
+        <div th:each="minijuego : ${minijuegos}" class="minijuego-card">
+            <img th:src="${minijuego.urlPortada}" alt="Portada del juego">
+            <h3 th:text="${minijuego.nombre}">Nombre del Minijuego</h3>
+            <p th:text="${minijuego.descripcion}">Descripción breve del minijuego.</p>
+            <a th:href="@{/jugar/{id}(id=${minijuego.id})}" class="button">Jugar</a>
+        </div>
+
+        <div th:if="${minijuegos.isEmpty()}">
+            <p>No hay minijuegos disponibles aún. ¡Pronto tendremos más!</p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Plataforma de Minijuegos</p>
+</footer>
+</body>
+</html>
